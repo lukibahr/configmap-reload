@@ -22,7 +22,7 @@ GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
 ORG := github.com/jimmidyson
 REPOPATH ?= $(ORG)/configmap-reload
-DOCKER_IMAGE_NAME ?= jimmidyson/configmap-reload
+DOCKER_IMAGE_NAME ?= lukasbahr/configmap-reload
 DOCKER_IMAGE_TAG ?= latest
 
 LDFLAGS := -s -w -extldflags '-static'
@@ -44,7 +44,7 @@ DEFAULT_BASEIMAGE_s390x   := s390x/busybox:1.33.0
 
 BASEIMAGE ?= $(DEFAULT_BASEIMAGE_$(GOARCH))
 
-BINARY=configmap-reload-linux-$(GOARCH)
+BINARY=configmap-reload-$(GOOS)-$(GOARCH)
 
 out/configmap-reload: out/configmap-reload-$(GOOS)-$(GOARCH)
 	cp out/configmap-reload-$(GOOS)-$(GOARCH) out/configmap-reload

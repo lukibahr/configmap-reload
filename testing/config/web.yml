@@ -1,0 +1,4 @@
+# Usernames and passwords required to connect to Prometheus.
+# Passwords are hashed with bcrypt: https://github.com/prometheus/exporter-toolkit/blob/master/https/README.md#about-bcrypt
+basic_auth_users:
+  federate: $2y$10$/UFbAusGRcgKiz5PsedsHu8iTMaHdUyYoyN36QbdUKp5wrAY6Ea96

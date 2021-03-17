@@ -24,6 +24,8 @@ var (
 	webhookMethod     = flag.String("webhook-method", "POST", "the HTTP method url to use to send the webhook")
 	webhookStatusCode = flag.Int("webhook-status-code", 200, "the HTTP status code indicating successful triggering of reload")
 	webhookRetries    = flag.Int("webhook-retries", 1, "the amount of times to retry the webhook reload request")
+	webhookAuthUser = flag.String("webhook-auth-username", "admin", "Username to specify if webhook requires basic authentication.")
+	webhookAuthPassword = flag.String("webhook-auth-password", "admin123", "Password to specify if webhook requires basic authentication.")
 	listenAddress     = flag.String("web.listen-address", ":9533", "Address to listen on for web interface and telemetry.")
 	metricPath        = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 
@@ -109,11 +111,16 @@ func main() {
 						log.Println("error:", err)
 						continue
 					}
+					// First, try to parse user:password combination from url
 					userInfo := h.User
 					if userInfo != nil {
 						if password, passwordSet := userInfo.Password(); passwordSet {
 							req.SetBasicAuth(userInfo.Username(), password)
 						}
+					}
+					// Second, try to set user parsed by cli flags
+					if webhookAuthUser != nil && webhookAuthPassword != nil {
+							req.SetBasicAuth(*webhookAuthUser, *webhookAuthPassword)
 					}
 
 					successfulReloadWebhook := false
